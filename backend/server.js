@@ -1,7 +1,9 @@
+import dotevn from "dotenv"
+dotevn.config()
 import express from 'express'
 import products from './data/products.js'
 
-const PORT = 5000
+const PORT = process.env.PORT
 const app = express()
 
 app.get('/', (req,res)=> {
