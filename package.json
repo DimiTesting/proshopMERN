@@ -1,0 +1,15 @@
+{
+  "name": "proshopmern",
+  "version": "1.0.0",
+  "description": "E-commerce shop web-application written with MERN stack",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "author": "Amankeldi Kurban",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
