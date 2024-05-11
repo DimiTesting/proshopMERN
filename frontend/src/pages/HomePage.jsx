@@ -9,7 +9,7 @@ const HomePage = () => {
             <Row>
                 {products.map((product) => (
                     <Col sm={12} md={6} lg={4} xl={3}>
-                        <ProductItem key={product._id} product={product}/>
+                        <ProductItem key={product._id} product={product} id={product._id}/>
                     </Col>
                 ))}
             </Row>
