@@ -5,12 +5,13 @@ import ProductItem from '../components/ProductItem'
 const HomePage = () => {
     return (
         <>
+            <h1> Latest Products </h1>
             <Row>
-                <Col>
-                    {products.map((product) => (
+                {products.map((product) => (
+                    <Col sm={12} md={6} lg={4} xl={3}>
                         <ProductItem key={product._id} product={product}/>
-                    ))}
-                </Col>
+                    </Col>
+                ))}
             </Row>
         </>
     )
