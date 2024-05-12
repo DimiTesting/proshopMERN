@@ -1,5 +1,7 @@
 import dotevn from "dotenv"
 dotevn.config()
+import connectDB from "./config/db.js"
+connectDB()
 import express from 'express'
 import products from './data/products.js'
 
