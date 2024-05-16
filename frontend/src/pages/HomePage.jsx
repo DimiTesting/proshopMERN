@@ -1,6 +1,8 @@
 import {Row, Col} from 'react-bootstrap'
 import { useGetProductsQuery } from '../slices/productsApiSlice'
 import ProductItem from '../components/ProductItem'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 const HomePage = () => {
 
@@ -10,7 +12,7 @@ const HomePage = () => {
       
         <>
             {isLoading ? 
-                (<h2>Loading..</h2>) : error ? (<div>{error?.data?.message || error.error}</div>) :
+                (<Loader/>) : error ? (<Message>{error?.data?.message || error.error}</Message>) :
                 (<>
                     <h1> Latest Products </h1>
                     <Row>

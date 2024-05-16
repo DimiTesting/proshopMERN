@@ -1,6 +1,8 @@
 import { useParams, Link } from 'react-router-dom'
 import {Row, Col, Image, Button, ListGroup, ListGroupItem, Card} from 'react-bootstrap'
 import Rating from '../components/Rating'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 import { useGetProductDetailsQuery } from '../slices/productsApiSlice'
 
 function ProductPage() {
@@ -11,11 +13,12 @@ function ProductPage() {
     return(
         <>
             {
-                isLoading? (<h2>Loading...</h2>): error? (<div> {error?.data?.message || error.error}</div>): 
+                isLoading? (<Loader/>): error? (<Message> {error?.data?.message || error.error}</Message>): 
                 (<>
                     <Link className='btn btn-light my-3' to='/'>
                         Go Back
                     </Link>
+
                     <Row>
                         <Col md={5}>
                             <Image src={`${product.image}`} alt={`${product.name}`} fluid/>
