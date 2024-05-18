@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import {Row, Col, Image, Button, ListGroup, ListGroupItem, Card} from 'react-bootstrap'
+import {Row, Form, Col, Image, Button, ListGroup, ListGroupItem, Card} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -9,6 +10,7 @@ function ProductPage() {
 
     const {id:productId} = useParams()
     const {data:product, isLoading, error} = useGetProductDetailsQuery(productId)
+    const [qty, setQty] = useState(1)
 
     return(
         <>
@@ -46,6 +48,26 @@ function ProductPage() {
                                             <Col> {product.countInStock>1? 'In Stock': 'Out of Stock'}</Col>
                                         </Row>
                                     </ListGroupItem>
+
+                                    {product.countInStock>1 && (
+                                        <ListGroupItem>
+                                            <Row>
+                                                <Col>Qty</Col>
+                                                <Col> 
+                                                    <Form.Control as='select' value={qty} onChange={(e)=> setQty(e.target.value)}>
+                                                        {[...Array(product.countInStock)].keys().map((x) => (
+                                                            <option 
+                                                                key={x+1} 
+                                                                value={x+1}> 
+                                                                {x+1} 
+                                                            </option>
+                                                        ))}
+                                                    </Form.Control>
+                                                </Col>
+                                            </Row>
+                                        </ListGroupItem>
+                                    )}
+
                                     <ListGroupItem>
                                         <Button className='btn btn-block' type='button' disabled={product.countInStock===0}>
                                             Add to Card
