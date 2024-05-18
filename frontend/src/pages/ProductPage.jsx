@@ -1,16 +1,25 @@
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import {Row, Form, Col, Image, Button, ListGroup, ListGroupItem, Card} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { useGetProductDetailsQuery } from '../slices/productsApiSlice'
+import { addToCart } from '../slices/cartSlice'
 
 function ProductPage() {
 
     const {id:productId} = useParams()
     const {data:product, isLoading, error} = useGetProductDetailsQuery(productId)
     const [qty, setQty] = useState(1)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const addToCartHandler = () => {
+        dispatch(addToCart({...product, qty}))
+        navigate('/cart')
+    }
 
     return(
         <>
@@ -49,13 +58,13 @@ function ProductPage() {
                                         </Row>
                                     </ListGroupItem>
 
-                                    {product.countInStock>1 && (
+                                    {product.countInStock>0 && (
                                         <ListGroupItem>
                                             <Row>
                                                 <Col>Qty</Col>
                                                 <Col> 
-                                                    <Form.Control as='select' value={qty} onChange={(e)=> setQty(e.target.value)}>
-                                                        {[...Array(product.countInStock)].keys().map((x) => (
+                                                    <Form.Control as='select' value={qty} onChange={(e)=> setQty(Number(e.target.value))}>
+                                                        {[...Array(product.countInStock).keys()].map((x) => (
                                                             <option 
                                                                 key={x+1} 
                                                                 value={x+1}> 
@@ -69,7 +78,7 @@ function ProductPage() {
                                     )}
 
                                     <ListGroupItem>
-                                        <Button className='btn btn-block' type='button' disabled={product.countInStock===0}>
+                                        <Button className='btn btn-block' type='button' disabled={product.countInStock===0} onClick={addToCartHandler}>
                                             Add to Card
                                         </Button>
                                     </ListGroupItem>

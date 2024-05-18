@@ -22,7 +22,7 @@ export const cartSlice = createSlice({
             state.ItemPrice = addDecimals(state.cartItem.reduce((acc, item) => acc+item.price*item.qty, 0))
             state.ShippingPrice = addDecimals(Number(state.ItemPrice) > 100 ? 0 : 10)
             state.TaxPrice = addDecimals(Number(state.ItemPrice) * 0.15)
-            state.Total = addDecimals(state.ItemPrice + state.ShippingPrice + state.TaxPrice)
+            state.Total = addDecimals(Number(state.ItemPrice) + Number(state.ShippingPrice) + Number(state.TaxPrice))
 
             localStorage.setItem('cart', JSON.stringify(state))
         }
