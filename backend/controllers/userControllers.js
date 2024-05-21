@@ -1,5 +1,6 @@
 import User from '../models/userModel.js'
 import asynchHandler from '../middlewares/asynchHandler.js'
+import jwt from 'jsonwebtoken'
 
 //@desc Auth user && get token
 //@path POST /api/users/login
@@ -8,6 +9,16 @@ import asynchHandler from '../middlewares/asynchHandler.js'
 const authUser = asynchHandler(async(req, res)=> {
     const {email, password} = req.body
     const user = await User.findOne({email})
+    const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+
+    res.cookie('jwt', token, {
+        httpOnly: true, 
+        secure: process.env.NODE_ENV !== 'development', 
+        sameSite: 'strict', 
+        maxAge: 30 * 24 * 60 * 60 * 1000
+    })
 
     if (user && (await user.matchPassword(password))) {
         res.json({
