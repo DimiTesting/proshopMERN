@@ -9,6 +9,11 @@ import generateToken from '../utils/generateToken.js'
 
 const authUser = asynchHandler(async(req, res)=> {
     const {email, password} = req.body
+
+    if(!email || !password) {
+        res.status(404)
+        throw new Error('Password or email is missing')
+    }
     const user = await User.findOne({email})
 
     generateToken(res, user._id)

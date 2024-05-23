@@ -6,6 +6,8 @@ import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -24,6 +26,7 @@ const App = () => {
           </main>
         <Footer/>
       </Router>
+      <ToastContainer/>
     </>
   )
 }
