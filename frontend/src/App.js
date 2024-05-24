@@ -1,10 +1,13 @@
 import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import PrivateRoute from './components/PrivateRoute'
 import HomePage from "./pages/HomePage"
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import ShippingPage from './pages/ShippingPage'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +24,10 @@ const App = () => {
                         <Route path='/products/:id' element={<ProductPage/>}/>
                         <Route path='/cart' element={<CartPage/>}/>
                         <Route path='/sign-in' element={<LoginPage/>}/>
+                        <Route path='/register' element={<RegisterPage/>}/>
+                        <Route path='' element={<PrivateRoute/>}>
+                          <Route path='/shipping' element={<ShippingPage/>}/>
+                        </Route>
                     </Routes>
             </Container>
           </main>

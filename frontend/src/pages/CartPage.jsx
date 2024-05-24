@@ -21,7 +21,7 @@ const CartPage = () => {
     }
 
     const proceedToCheckout = async() => {
-        navigate('/login?redirect=/shipping')
+        navigate('/sign-in?redirect=/shipping')
     }
 
     return (
