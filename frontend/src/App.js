@@ -8,6 +8,7 @@ import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ShippingPage from './pages/ShippingPage'
+import PaymentPage from './pages/PaymentPage'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,6 +28,9 @@ const App = () => {
                         <Route path='/register' element={<RegisterPage/>}/>
                         <Route path='' element={<PrivateRoute/>}>
                           <Route path='/shipping' element={<ShippingPage/>}/>
+                        </Route>
+                        <Route path='' element={<PrivateRoute/>}>
+                          <Route path='/payments' element={<PaymentPage/>}/>
                         </Route>
                     </Routes>
             </Container>
