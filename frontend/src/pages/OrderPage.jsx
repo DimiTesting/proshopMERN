@@ -1,8 +1,12 @@
-import { useGetOrderQuery } from '../slices/ordersApiSlice'
+import { useGetOrderQuery, usePayOrderMutation, useGetPayPalClientIdQuery } from '../slices/ordersApiSlice'
 import { useParams, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import {Row, Col, ListGroup, Button, Image, Card, ListGroupItem} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import {toast} from 'react-toastify'
+import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js'
 
 const OrderPage = () => {
     const {id:orderId} = useParams()

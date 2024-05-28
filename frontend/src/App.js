@@ -30,14 +30,8 @@ const App = () => {
                         <Route path='/register' element={<RegisterPage/>}/>
                         <Route path='' element={<PrivateRoute/>}>
                           <Route path='/shipping' element={<ShippingPage/>}/>
-                        </Route>
-                        <Route path='' element={<PrivateRoute/>}>
                           <Route path='/payments' element={<PaymentPage/>}/>
-                        </Route>
-                        <Route path='' element={<PrivateRoute/>}>
                           <Route path='/placeorder' element={<PlaceOrderPage/>}/>
-                        </Route>
-                        <Route path='' element={<PrivateRoute/>}>
                           <Route path='/order/:id' element={<OrderPage/>}/>
                         </Route>
                     </Routes>
