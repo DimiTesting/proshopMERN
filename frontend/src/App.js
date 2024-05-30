@@ -11,6 +11,7 @@ import ShippingPage from './pages/ShippingPage'
 import PaymentPage from './pages/PaymentPage'
 import PlaceOrderPage from './pages/PlaceOrderPage'
 import OrderPage from './pages/OrderPage'
+import ProfilePage from './pages/ProfilePage'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,6 +34,7 @@ const App = () => {
                           <Route path='/payments' element={<PaymentPage/>}/>
                           <Route path='/placeorder' element={<PlaceOrderPage/>}/>
                           <Route path='/order/:id' element={<OrderPage/>}/>
+                          <Route path='/profile' element={<ProfilePage/>}/>
                         </Route>
                     </Routes>
             </Container>
