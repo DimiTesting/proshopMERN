@@ -1,16 +1,31 @@
 import {useGetProductsQuery} from '../../slices/productsApiSlice'
+import { useCreateProductMutation } from '../../slices/productsApiSlice'
 import {Row, Col, Table, Button} from 'react-bootstrap'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import {LinkContainer} from 'react-router-bootstrap'
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
+import {toast} from 'react-toastify'
 
 
 const ProductListPage = () =>{
-    const {data: products, isLoading, error} = useGetProductsQuery()
+    const {data: products, isLoading, error, refetch} = useGetProductsQuery()
+    const [createproduct, {isLoading: productLoading}] = useCreateProductMutation()
 
     function deleteProduct(id) {
         console.log(`Delete: ${id}`)
+    }
+
+    async function handleCreate() {
+        if (window.confirm('Would you like to create a new product')) {
+            try {
+                await createproduct()
+                refetch()
+                toast.success('New sample product has been created')
+            } catch (err) {
+                toast.error(err?.data?.error || err.error)
+            }
+        }
     }
 
     return (
@@ -20,11 +35,9 @@ const ProductListPage = () =>{
                 <h2> Products </h2>
             </Col>
             <Col className='text-end'>
-                <LinkContainer to='/createproduct/admin'>
-                    <Button type='submit' className='btn-sm m-3'>
+                    <Button type='submit' className='btn-sm m-3' onClick={() => handleCreate()}>
                         Create Product
                     </Button>
-                </LinkContainer>
             </Col>
         </Row>
 

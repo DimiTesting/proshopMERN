@@ -15,7 +15,6 @@ const getProducts = asynchHandler(async(req, res)=> {
 //@path /api/products/:id
 //@access Public
 
-
 const getProductById = asynchHandler(async(req, res) => {
     const product = await Product.findById(req.params.id)
     if(product) {
@@ -26,4 +25,25 @@ const getProductById = asynchHandler(async(req, res) => {
     }
 })
 
-export {getProducts, getProductById}
+//@desk Create product
+//@method POST
+//@path /api/products
+//@access Private, Admin
+
+const createProduct = asynchHandler(async(req, res) => {
+    const product = new Product({
+        user: req.user._id, 
+        name: "sample", 
+        image: '/images/sample.jpg', 
+        brand: "sample", 
+        category: "sample", 
+        description: "sample", 
+        numReviews: 0, 
+        price: 0,
+        countInStock: 0
+    })
+    const newProduct = await product.save()
+    res.status(201).json(newProduct)
+})
+
+export {getProducts, getProductById, createProduct}
