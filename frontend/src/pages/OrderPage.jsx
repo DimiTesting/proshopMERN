@@ -1,4 +1,4 @@
-import { useGetOrderQuery, usePayOrderMutation, useGetPayPalClientIdQuery } from '../slices/ordersApiSlice'
+import { useGetOrderQuery, usePayOrderMutation, useGetPayPalClientIdQuery, useOrderDeliverMutation } from '../slices/ordersApiSlice'
 import { useParams, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
@@ -14,6 +14,7 @@ const OrderPage = () => {
 
     const [payOrder, {isLoading: loadingPay}] = usePayOrderMutation()
     const [{isPending}, paypalDispatch] = usePayPalScriptReducer()
+    const [deliverOrder, {isLoading: loadingDeliver}] = useOrderDeliverMutation()
     const {data: paypal, isLoading: loadingPayPal, error: errorPayPal} = useGetPayPalClientIdQuery()
     const {userInfo} = useSelector((state)=> state.auth)
 
@@ -49,11 +50,11 @@ const OrderPage = () => {
         })
     }
 
-    async function onApproveTest() {
+    /*async function onApproveTest() {
         await payOrder({orderId, details: {payer: {}}})
         refetch()
         toast.success("Payment went through")
-    }
+    }*/
 
     function onError(err){
         toast.error(err.message)
@@ -73,6 +74,16 @@ const OrderPage = () => {
         })
     }
 
+    async function handleDelivered() {
+       try {
+            await deliverOrder(orderId)
+            refetch()
+            toast.success('Order has been marked as delivered')
+       } catch (err) {
+            toast.error(err?.data?.message || err.message)
+       }
+    }
+
     return isLoading ? <Loader/> : error ? <Message variant="danger"> No order</Message> : (
         <>
             <h1> Order {orderId} </h1>
@@ -90,7 +101,7 @@ const OrderPage = () => {
                                 {order.order.shippingAddress.country}
                             </p>
                             {order.order.isDelivered? (
-                                <Message variant='success'> Delivered </Message>): 
+                                <Message variant='success'> Delivered at {order.order.deliveredAt.substring(0,10)} </Message>): 
                                 (<Message variant='danger'> Not delivered </Message>)}
                         </ListGroup.Item>
 
@@ -98,7 +109,7 @@ const OrderPage = () => {
                             <h2> Payment </h2>
                             <p> <strong> Method </strong> {order.order.paymentMethod} </p>
                             {order.order.isPaid? (
-                                <Message variant='success'> Paid at {order.order.paidAt} </Message>): 
+                                <Message variant='success'> Paid at {order.order.paidAt.substring(0,10)} </Message>): 
                                 (<Message variant='danger'> Not paid </Message>)}
                         </ListGroup.Item>
 
@@ -168,6 +179,16 @@ const OrderPage = () => {
                                             </div>
                                         </div>
                                     )}
+                                </ListGroup.Item>
+                            )}
+
+                            {loadingDeliver && <Loader/>}
+
+                            {userInfo && userInfo.isAdmin && order.order.isPaid && !order.order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button className='btn btn-block' type='button' onClick={handleDelivered}>
+                                        Mark as Delivered
+                                    </Button>
                                 </ListGroup.Item>
                             )}
                         </ListGroup>
