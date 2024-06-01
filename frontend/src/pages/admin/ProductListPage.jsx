@@ -41,6 +41,8 @@ const ProductListPage = () =>{
             </Col>
         </Row>
 
+        {productLoading && <Loader/>}
+
         {isLoading? <Loader/>: error? <Message variant='danger'> {error} </Message> : (
             <Table striped hover responsive className='table-sm mt-5' >
                 <thead>
@@ -61,7 +63,7 @@ const ProductListPage = () =>{
                                 <td> {product.category} </td>
                                 <td> {product.brand} </td>
                                 <td> 
-                                    <LinkContainer to={`/admin/product/${product._id}`}>
+                                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
                                         <Button variant='light' className='btn-sm'> 
                                             {<FaEdit/>} 
                                         </Button> 

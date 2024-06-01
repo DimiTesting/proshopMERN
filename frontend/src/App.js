@@ -15,6 +15,7 @@ import OrderPage from './pages/OrderPage'
 import ProfilePage from './pages/ProfilePage'
 import OrderListPage from './pages/admin/OrderListPage'
 import ProductListPage from './pages/admin/ProductListPage'
+import ProductEditPage from './pages/admin/ProductEditPage'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -42,8 +43,9 @@ const App = () => {
                         </Route>
 
                         <Route path='' element={<AdminRoute/>}>
-                          <Route path='/orderlist' element={<OrderListPage/>}/>
-                          <Route path='/productlist' element={<ProductListPage/>}/>
+                          <Route path='/admin/orderlist' element={<OrderListPage/>}/>
+                          <Route path='/admin/productlist' element={<ProductListPage/>}/>
+                          <Route path='/admin/product/:id/edit' element={<ProductEditPage/>}/>
                         </Route>
                     </Routes>
             </Container>
