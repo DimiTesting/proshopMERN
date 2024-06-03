@@ -44,7 +44,8 @@ const ProductEditPage = () => {
             category: category, 
             price: price, 
             description: description,
-            countInStock: countInStock
+            countInStock: countInStock, 
+            image: image
         }
 
         console.log(updatedProduct)
@@ -52,6 +53,7 @@ const ProductEditPage = () => {
         const result = await updateProduct(updatedProduct)
 
         if(result.error) {
+            console.log(result.error)
             toast.error(result.error)
         } else { 
             toast.success('Product has been udpated')
@@ -122,6 +124,16 @@ const ProductEditPage = () => {
                                     placeholder="Enter description"
                                     value={description} 
                                     onChange={(e)=>setDescription(e.target.value)}
+                                ></Form.Control>
+                            </Form.Group>
+
+                            <Form.Group controlId='image' className="my-3">
+                                <Form.Label> Image </Form.Label>
+                                <Form.Control 
+                                    type="text"
+                                    placeholder="Enter image"
+                                    value={image} 
+                                    onChange={(e)=>setImage(e.target.value)}
                                 ></Form.Control>
                             </Form.Group>
 

@@ -12,6 +12,8 @@ const ProductListPage = () =>{
     const {data: products, isLoading, error, refetch} = useGetProductsQuery()
     const [createproduct, {isLoading: productLoading}] = useCreateProductMutation()
 
+    console.log(products)
+
     function deleteProduct(id) {
         console.log(`Delete: ${id}`)
     }

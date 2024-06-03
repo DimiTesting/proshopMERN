@@ -57,6 +57,7 @@ const updateProduct = asynchHandler(async(req, res) => {
     const product = await Product.findById(req.params.id)
     
     if(product) {
+        product.user = req.user._id
         product.name = name
         product.brand = brand
         product.image = image
