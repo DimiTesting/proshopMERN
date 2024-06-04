@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { useUpdateProductMutation, useGetProductDetailsQuery } from "../../slices/productsApiSlice";
+import { useUpdateProductMutation, useGetProductDetailsQuery, useUploadProductImageMutation } from "../../slices/productsApiSlice";
 import FormContainer from "../../components/FormContainer";
 import {Form, Button} from 'react-bootstrap'
 import Loader from "../../components/Loader";
@@ -16,8 +16,9 @@ const ProductEditPage = () => {
     const [countInStock, setCountInStock] = useState(0)
     const [image, setImage] = useState('')
     const [description, setDescription] = useState('')
-    const {data:product, isLoading:productLoading, error, refetch} = useGetProductDetailsQuery(productId)
+    const {data:product, isLoading:productLoading, error} = useGetProductDetailsQuery(productId)
     const [updateProduct, {isLoading: updateLoading}] = useUpdateProductMutation()
+    const [uploadProductImage, {isLoading: uploadLoading}] = useUploadProductImageMutation()
     const navigate = useNavigate()
     //console.log(product)
 
@@ -35,7 +36,6 @@ const ProductEditPage = () => {
 
     const handleUpdate = async(e) => {
         e.preventDefault()
-        console.log('HandleUpdate clicked')
 
         const updatedProduct = {
             _id: productId, 
@@ -48,8 +48,6 @@ const ProductEditPage = () => {
             image: image
         }
 
-        console.log(updatedProduct)
-
         const result = await updateProduct(updatedProduct)
 
         if(result.error) {
@@ -61,6 +59,23 @@ const ProductEditPage = () => {
         }
     }
 
+    const handleUpload = async(e) => {
+        //console.log(e.target.files[0])
+        //console.log(image)
+        e.preventDefault()
+        const formData = new FormData()
+        console.log(formData)
+        formData.append('image', e.target.files[0])
+        try {
+            const res = await uploadProductImage(formData).unwrap()
+            toast.success(res.message)
+            setImage(res.image)
+        } catch (err) {
+            console.log(err)
+            toast.error(err.data?.message || err.error)
+        }
+    }
+
     return (
         <>
            <Link to='/admin/productlist' className="btn btn-light">
@@ -69,6 +84,7 @@ const ProductEditPage = () => {
                 <FormContainer>
                     <h1>Edit Product </h1>
                     {updateLoading && <Loader/>}
+                    {uploadLoading && <Loader/>}
 
                     {productLoading ? <Loader/> : error? <Message variant={'danger'}> {error} </Message>: (
                         <Form onSubmit={handleUpdate}>
@@ -134,6 +150,11 @@ const ProductEditPage = () => {
                                     placeholder="Enter image"
                                     value={image} 
                                     onChange={(e)=>setImage(e.target.value)}
+                                ></Form.Control>
+                                <Form.Control 
+                                    type="file"
+                                    placeholder="Upload file"
+                                    onChange={handleUpload}
                                 ></Form.Control>
                             </Form.Group>
 
