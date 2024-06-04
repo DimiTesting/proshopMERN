@@ -137,7 +137,8 @@ const updateUserProfile = asynchHandler(async(req, res)=> {
 //@access Private/Admin
 
 const getUsers = asynchHandler(async(req, res)=> {
-    res.send('Get Users')
+    const users = await User.find({})
+    res.status(200).json(users)
 })
 
 //@desc Get User by Id
@@ -145,7 +146,13 @@ const getUsers = asynchHandler(async(req, res)=> {
 //@access Private/Admin
 
 const getUserById = asynchHandler(async(req, res)=> {
-    res.send('Get User by id')
+    const user = await User.findById(req.params.id).select('-password')
+    if (user) {
+        res.status(200).json(user)
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
 })
 
 //@desc Delete Users
@@ -153,7 +160,20 @@ const getUserById = asynchHandler(async(req, res)=> {
 //@access Private/Admin
 
 const deleteUser = asynchHandler(async(req, res)=> {
-    res.send('Delete User')
+    const user = await User.findById(req.params.id)
+
+    if(user) {
+        if(user.isAdmin) {
+            res.status(404)
+            throw new Error('Admin can not be deleted')
+        } else {
+            await User.findOneAndDelete({_id: user._id})
+            res.status(200).json({message: "User is deleted"})
+        }
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
 })
 
 //@desc Update User
@@ -161,7 +181,23 @@ const deleteUser = asynchHandler(async(req, res)=> {
 //@access Private/Admin
 
 const updateUser = asynchHandler(async(req, res)=> {
-    res.send('Update User')
+    const user = await User.findById(req.params.id)
+
+    if(user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        user.isAdmin = Boolean(req.body.isAdmin)
+        const updatedUser = await user.save()
+        res.status(200).json({
+            _id: updatedUser._id, 
+            name: updatedUser.name, 
+            email: updatedUser.email, 
+            isAdmin: updatedUser.isAdmin
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
 })
 
 export {

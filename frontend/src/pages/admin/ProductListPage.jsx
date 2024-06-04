@@ -1,5 +1,5 @@
 import {useGetProductsQuery} from '../../slices/productsApiSlice'
-import { useCreateProductMutation } from '../../slices/productsApiSlice'
+import { useCreateProductMutation, useDeleteProductMutation } from '../../slices/productsApiSlice'
 import {Row, Col, Table, Button} from 'react-bootstrap'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import {LinkContainer} from 'react-router-bootstrap'
@@ -11,11 +11,19 @@ import {toast} from 'react-toastify'
 const ProductListPage = () =>{
     const {data: products, isLoading, error, refetch} = useGetProductsQuery()
     const [createproduct, {isLoading: productLoading}] = useCreateProductMutation()
-
+    const [deleteproduct, {isLoading: deleteLoading}] = useDeleteProductMutation()
     console.log(products)
 
-    function deleteProduct(id) {
-        console.log(`Delete: ${id}`)
+    async function deleteProduct(id) {
+        if (window.confirm('Would you like to create a new product')) {
+            try {
+                await deleteproduct(id)
+                refetch()
+                toast.success('Product has been deleted')
+            } catch (err) {
+                toast.error(err?.data?.error || err.err)
+            }
+        }
     }
 
     async function handleCreate() {
@@ -44,6 +52,7 @@ const ProductListPage = () =>{
         </Row>
 
         {productLoading && <Loader/>}
+        {deleteLoading && <Loader/>}
 
         {isLoading? <Loader/>: error? <Message variant='danger'> {error} </Message> : (
             <Table striped hover responsive className='table-sm mt-5' >
