@@ -7,8 +7,12 @@ import Product from "../models/productModel.js";
 //@access Public
 
 const getProducts = asynchHandler(async(req, res)=> {
-    const products = await Product.find({})
-    res.json(products)
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
+    const count = await Product.countDocuments()
+
+    const products = await Product.find({}).limit(pageSize).skip(pageSize * (page-1))
+    res.json({products, page, pages: Math.ceil(count/pageSize)})
 })
 
 //@desc Get product
