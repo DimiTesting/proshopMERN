@@ -91,4 +91,43 @@ const deleteProduct = asynchHandler(async(req,res) => {
     }
 })
 
-export {getProducts, getProductById, createProduct, updateProduct, deleteProduct}
+//@description create product reviews 
+//@method PUT
+//@path /api/products/:id/review
+//@access Private
+
+const createProductReview = asynchHandler(async(req, res) => {
+    const {comment, rating} = req.body
+    const product = await Product.findById(req.params.id)
+
+    if(product) {
+        const existingReview = product.reviews.find((review) => review.user.toString() === req.user._id.toString())
+        if (existingReview) {
+            res.status(404)
+            throw new Error('User has already reviewed the product')}
+            
+        const newReview = {
+            name: req.user.name, 
+            comment: comment, 
+            rating: Number(rating),
+            user: req.user._id
+        }
+
+        product.reviews.push(newReview)
+
+        const averageRating = product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
+
+        product.rating = Number(averageRating)
+        product.numReviews = product.reviews.length
+        
+        await product.save()
+        res.status(201).json({message: 'Review has been added'})
+    } else {
+        res.status(404)
+        throw new Error('Product does not exist')
+    }
+})
+
+
+
+export {getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview}
