@@ -1,18 +1,20 @@
 import {useGetProductsQuery} from '../../slices/productsApiSlice'
 import { useCreateProductMutation, useDeleteProductMutation } from '../../slices/productsApiSlice'
+import { useParams } from 'react-router-dom'
 import {Row, Col, Table, Button} from 'react-bootstrap'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import {LinkContainer} from 'react-router-bootstrap'
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
 import {toast} from 'react-toastify'
+import Paginate from '../../components/Paginate'
 
 
 const ProductListPage = () =>{
-    const {data: products, isLoading, error, refetch} = useGetProductsQuery()
+    const {pageNumber} = useParams()
+    const {data, isLoading, error, refetch} = useGetProductsQuery({pageNumber})
     const [createproduct, {isLoading: productLoading}] = useCreateProductMutation()
     const [deleteproduct, {isLoading: deleteLoading}] = useDeleteProductMutation()
-    console.log(products)
 
     async function deleteProduct(id) {
         if (window.confirm('Would you like to create a new product')) {
@@ -66,7 +68,7 @@ const ProductListPage = () =>{
                     </tr>
                 </thead>
                 <tbody>
-                        {products.map((product) => (
+                        {data.products.map((product) => (
                             <tr key={product._id}>
                                 <td> {product._id} </td>
                                 <td> {product.name} </td>
@@ -91,6 +93,7 @@ const ProductListPage = () =>{
                 </tbody>
             </Table>
         )}
+        <Paginate page={data.page} pages={data.pages} isAdmin={true}/> 
     </>
     )
 }
