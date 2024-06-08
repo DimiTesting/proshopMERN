@@ -11,8 +11,8 @@ import Paginate from '../../components/Paginate'
 
 
 const ProductListPage = () =>{
-    const {pageNumber} = useParams()
-    const {data, isLoading, error, refetch} = useGetProductsQuery({pageNumber})
+    const {keyword, pageNumber} = useParams()
+    const {data, isLoading, error, refetch} = useGetProductsQuery({keyword, pageNumber})
     const [createproduct, {isLoading: productLoading}] = useCreateProductMutation()
     const [deleteproduct, {isLoading: deleteLoading}] = useDeleteProductMutation()
 
