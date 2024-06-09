@@ -1,7 +1,7 @@
 import {Carousel, Image} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
+import Loader from './Loader'
+import Message from './Message'
 import { useGetTopRatedProductsQuery } from '../slices/productsApiSlice'
 
 
