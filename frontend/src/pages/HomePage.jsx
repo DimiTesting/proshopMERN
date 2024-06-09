@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import Message from '../components/Message'
+import ProductCauresel from '../components/ProductCauresel'
 
 const HomePage = () => {
     const {keyword, pageNumber} = useParams()
@@ -13,7 +14,7 @@ const HomePage = () => {
     return (
       
         <>
-            {keyword && <Link to='/' className='btn btn-light mb-4'> Go Back</Link>}
+            {!keyword ? <ProductCauresel/> :<Link to='/' className='btn btn-light mb-4'> Go Back</Link>}
             {isLoading ? 
                 (<Loader/>) : error ? (<Message>{error?.data?.message || error.error}</Message>) :
                 (<>
