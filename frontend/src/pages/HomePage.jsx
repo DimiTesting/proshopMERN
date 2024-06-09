@@ -1,7 +1,7 @@
 import {Row, Col} from 'react-bootstrap'
 import { useGetProductsQuery } from '../slices/productsApiSlice'
 import ProductItem from '../components/ProductItem'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import Message from '../components/Message'
@@ -13,6 +13,7 @@ const HomePage = () => {
     return (
       
         <>
+            {keyword && <Link to='/' className='btn btn-light mb-4'> Go Back</Link>}
             {isLoading ? 
                 (<Loader/>) : error ? (<Message>{error?.data?.message || error.error}</Message>) :
                 (<>
